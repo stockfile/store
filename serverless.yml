@@ -42,12 +42,20 @@ functions:
     handler: bin/handlers/addStore
     events:
       - http:
-          path: stores
+          path: /stores
           method: post
           cors: true
 
-plugins:
-
+  findStore:
+    handler: bin/handlers/findStore
+    events:
+      - http:
+          path: /stores/{id}
+          method: get
+          request:
+            parameter:
+              paths:
+                id: true
 
 resources:
   Resources:

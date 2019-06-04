@@ -5,13 +5,12 @@ echo "Compiling functions to bin/handlers/ ..."
 rm -rf bin/
 
 cd src/handlers/
-for f in *.go; do
-  filename="${f%.go}"
-  if GOOS=linux go build -ldflags="-s -w" -o "../../bin/handlers/$filename" ${f}; then
-    upx "../../bin/handlers/${filename%.*}"
-    echo "✓ Compiled $filename"
+for d in `ls -d */ | sed 's#/##'` ; do
+  if GOOS=linux go build -ldflags="-s -w" -o "../../bin/handlers/$d" ${d}/main.go; then
+    upx "../../bin/handlers/${d}"
+    echo "✓ Compiled $d"
   else
-    echo "✕ Failed to compile $filename!"
+    echo "✕ Failed to compile $d!"
     exit 1
   fi
 done
