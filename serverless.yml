@@ -11,6 +11,10 @@ custom:
       - Ref: AWS::Region
       - Ref: AWS::AccountId
       - table/${self:custom.storesTableName}
+  jwtAuthorizer:
+    type: CUSTOM
+    authorizerId:
+      Fn::ImportValue: ${self:provider.stage}-JwtAuthorizer
   dev:
     region: "ap-southeast-2" # Sydney
   staging:
@@ -55,10 +59,7 @@ functions:
       - http:
           path: /stores
           method: post
-          authorizer:
-            type: CUSTOM
-            authorizerId:
-              Fn::ImportValue: ${self:provider.stage}-JwtAuthorizer
+          authorizer: ${self:custom.jwtAuthorizer}
 
   findStore:
     handler: bin/handlers/findStore
@@ -70,10 +71,19 @@ functions:
             parameter:
               paths:
                 id: true
-          authorizer:
-            type: CUSTOM
-            authorizerId:
-              Fn::ImportValue: ${self:provider.stage}-JwtAuthorizer
+          authorizer: ${self:custom.jwtAuthorizer}
+
+  updateStore:
+    handler: bin/handlers/updateStore
+    events:
+      - http:
+          path: /stores/{id}
+          method: put
+          request:
+            parameter:
+              paths:
+                id: true
+          authorizer: ${self:custom.jwtAuthorizer}
 
 resources:
   Resources:
