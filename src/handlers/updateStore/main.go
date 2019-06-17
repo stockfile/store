@@ -57,6 +57,11 @@ func UpdateStore(ctx context.Context, request events.APIGatewayProxyRequest) (ev
 	json.Unmarshal([]byte(request.Body), store)
 
 	input := &dynamodb.UpdateItemInput{
+		Key: map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: aws.String(id),
+			},
+		},
 		ExpressionAttributeNames: map[string]*string{
 			"#d":    aws.String("description"),
 			"#u_at": aws.String("updated_at"),
@@ -67,11 +72,6 @@ func UpdateStore(ctx context.Context, request events.APIGatewayProxyRequest) (ev
 			},
 			":u_at": {
 				S: aws.String(store.UpdatedAt),
-			},
-		},
-		Key: map[string]*dynamodb.AttributeValue{
-			"id": {
-				S: aws.String(id),
 			},
 		},
 		UpdateExpression: aws.String("SET #d = :d, #u_at = :u_at"),
