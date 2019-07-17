@@ -90,7 +90,7 @@ func UpdateStore(ctx context.Context, request events.APIGatewayProxyRequest) (ev
 
 		if err != nil {
 			return events.APIGatewayProxyResponse{ // Error HTTP response
-				Body:       err.Error(),
+				Body:       "",
 				StatusCode: 500,
 			}, nil
 		}

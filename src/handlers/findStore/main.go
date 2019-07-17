@@ -40,7 +40,7 @@ func init() {
 }
 
 func FindStore(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	fmt.Println("FindStore")
+	fmt.Println(request.RequestContext.Authorizer["SF-User-Id"])
 
 	var (
 		id        = request.PathParameters["id"]
